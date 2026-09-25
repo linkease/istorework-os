@@ -138,3 +138,21 @@ define KernelPackage/vhost-net
 endef
 
 $(eval $(call KernelPackage,vhost-net))
+
+define KernelPackage/vhost-vsock
+  SUBMENU:=Virtualization
+  TITLE:=Host kernel accelerator for virtio-vsock
+  DEPENDS:=+kmod-vhost
+  KCONFIG:=CONFIG_VSOCKETS=y \
+    CONFIG_VSOCKMON=n \
+    CONFIG_VIRTIO_VSOCKETS_COMMON=y \
+    CONFIG_VHOST_VSOCK=m
+  FILES:=$(LINUX_DIR)/drivers/vhost/vhost_vsock.ko
+  AUTOLOAD:=$(call AutoProbe,vhost_vsock)
+endef
+
+define KernelPackage/vhost-vsock/description
+  Host-side virtio-vsock transport used by virtual machines.
+endef
+
+$(eval $(call KernelPackage,vhost-vsock))
