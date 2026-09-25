@@ -287,6 +287,21 @@ endef
 
 $(eval $(call KernelPackage,dm-thin))
 
+define KernelPackage/dm-snapshot
+  SUBMENU:=$(BLOCK_MENU)
+  TITLE:=Device Mapper snapshot target
+  DEPENDS:=+kmod-dm +kmod-dm-thin
+  KCONFIG:=CONFIG_DM_SNAPSHOT=m
+  FILES:=$(LINUX_DIR)/drivers/md/dm-snapshot.ko
+  AUTOLOAD:=$(call AutoLoad,32,dm-snapshot,1)
+endef
+
+define KernelPackage/dm-snapshot/description
+  Kernel device-mapper snapshot target required by LVM classic snapshots.
+endef
+
+$(eval $(call KernelPackage,dm-snapshot))
+
 define KernelPackage/dm-raid
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=LVM2 raid support
