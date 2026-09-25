@@ -262,6 +262,31 @@ endef
 
 $(eval $(call KernelPackage,dm))
 
+define KernelPackage/dm-thin
+  SUBMENU:=$(BLOCK_MENU)
+  TITLE:=Device Mapper thin provisioning target
+  DEPENDS:=+kmod-dm +kmod-lib-crc32c
+  KCONFIG:= \
+	CONFIG_DM_BUFIO=m \
+	CONFIG_DM_DEBUG_BLOCK_MANAGER_LOCKING=n \
+	CONFIG_DM_DEBUG_BLOCK_STACK_TRACING=n \
+	CONFIG_DM_BIO_PRISON=m \
+	CONFIG_DM_PERSISTENT_DATA=m \
+	CONFIG_DM_THIN_PROVISIONING=m
+  FILES:= \
+	$(LINUX_DIR)/drivers/md/dm-bufio.ko \
+	$(LINUX_DIR)/drivers/md/dm-bio-prison.ko \
+	$(LINUX_DIR)/drivers/md/persistent-data/dm-persistent-data.ko \
+	$(LINUX_DIR)/drivers/md/dm-thin-pool.ko
+  AUTOLOAD:=$(call AutoLoad,31,dm-bufio dm-bio-prison dm-persistent-data dm-thin-pool,1)
+endef
+
+define KernelPackage/dm-thin/description
+  Kernel device-mapper target and metadata helpers required by LVM thin pools.
+endef
+
+$(eval $(call KernelPackage,dm-thin))
+
 define KernelPackage/dm-raid
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=LVM2 raid support
